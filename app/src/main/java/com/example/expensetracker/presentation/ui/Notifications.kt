@@ -1,0 +1,215 @@
+package com.example.expensetracker.presentation.ui
+
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.NotificationsNone
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
+import com.example.expensetracker.data.local.Entity.notifyList
+
+
+@Composable
+fun NotificationScreen(navController: NavController){
+    Scaffold(
+        topBar = {
+            LargeHeader(
+                title = "Notification",
+                navigationIcon = Icons.Filled.ArrowBackIosNew,
+                onClick = {navController.popBackStack()}
+            )
+        }
+    ) { paddingValues ->
+
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxWidth()
+        ) {
+            HeaderComponent()
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+               items(notifyList){item ->
+                   NotifyCardItem(item.title)
+               }
+
+            }
+        }
+
+    }
+}
+
+
+@Composable
+fun HeaderComponent(){
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(207.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(
+                        topStart = 0.dp,
+                        topEnd = 0.dp,
+                        bottomStart = 32.dp,
+                        bottomEnd = 32.dp
+                    )
+                )
+        )
+
+        Card(
+            shape = CircleShape,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .offset(y = 32.dp)
+                .zIndex(1f)
+                .padding(horizontal = 32.dp)
+                .size(100.dp)
+                .clip(CircleShape)
+                .border(
+                    width = 3.dp,
+                    brush = Brush.linearGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.surface,
+                            MaterialTheme.colorScheme.primaryContainer
+                        ),
+                        start = Offset(0f, 0f),          // tepa
+                        end = Offset(0f, Float.POSITIVE_INFINITY) // pastga
+                    ),
+                    shape = CircleShape
+                )
+
+                .clickable {  },
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.background
+            )
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Notifications,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primaryContainer, // rang
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(CircleShape)
+            )
+
+
+        }
+
+    }
+    Spacer(modifier = Modifier.height(40.dp))
+
+}
+
+
+
+
+@Composable
+fun NotifyCardItem(
+    title: String
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val shape = RoundedCornerShape(16.dp) // 🔹 yagona shakl
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 4.dp)
+            .clip(shape)
+            .clickable { expanded = !expanded } ,// bosilganda kengaytirish,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceDim
+        ),
+        shape = shape, // 🔹 shu shakl Card uchun ham
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+
+
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 12.dp)
+                .padding(vertical = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Filled.NotificationsNone,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(
+                text = title,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = if (expanded) Int.MAX_VALUE else 1, // 🔹 kengaytirish
+                overflow = TextOverflow.Ellipsis, // 🔹 ortiqcha matnni "..." bilan yashirish
+                fontSize = 15.sp,
+                modifier = Modifier.animateContentSize()
+                    .padding(end = 32.dp)// 🔹 animatsion kengayish
+            )
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
