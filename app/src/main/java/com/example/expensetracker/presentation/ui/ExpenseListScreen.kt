@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.expensetracker.presentation.formatSmartDate
 import com.example.expensetracker.presentation.viewmodel.ExpenseViewModel
@@ -56,7 +58,7 @@ fun ExpenseListScreen(
 
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize() // ⚠️ fillMaxWidth emas
+                .fillMaxSize()
                 .padding(vertical = 2.dp)
         )
         {
@@ -78,7 +80,16 @@ fun ExpenseListScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Chap tomonda: nom va tur
+                       Icon(
+                            painter = painterResource(expense.category.iconRes),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(48.dp)
+                                .padding(end = 8.dp),
+                            tint = Color.Unspecified,
+                        )
+
+
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = expense.title,
@@ -98,7 +109,7 @@ fun ExpenseListScreen(
                                 text = "${"%,.1f".format(expense.amount)} so'm",
                                 style = MaterialTheme.typography.titleMedium,
                                 color = if (expense.type.equals(EnumTypes.income.name, true))
-                                    Color(0xFF2E7D32) // yashil
+                                    MaterialTheme.colorScheme.tertiaryContainer
                                 else
                                     Color(0xFFC62828) // qizil
                             )
@@ -108,8 +119,6 @@ fun ExpenseListScreen(
                                 color = MaterialTheme.colorScheme.outline
                             )
                         }
-
-                        // Menyu (uch nuqta)
                         Box {
                             IconButton(onClick = { expanded = true }) {
                                 Icon(
@@ -121,7 +130,9 @@ fun ExpenseListScreen(
 
                             DropdownMenu(
                                 expanded = expanded,
-                                onDismissRequest = { expanded = false }
+                                onDismissRequest = { expanded = false },
+                                modifier = Modifier.background(MaterialTheme.colorScheme.background) // umumiy fon
+
                             ) {
                                 DropdownMenuItem(
                                     text = { Text("Tahrirlash") },
@@ -142,7 +153,6 @@ fun ExpenseListScreen(
                     }
                 }
 
-                // 🔹 Har bir item orasida Divider (chiziq)
                 Divider(
                     thickness = 0.5.dp,
                     color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)

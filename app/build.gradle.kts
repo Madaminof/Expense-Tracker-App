@@ -40,6 +40,7 @@ android {
     }
 }
 
+
 dependencies {
     dependencies {
         // AndroidX Core
@@ -108,6 +109,20 @@ dependencies {
         // Debug only
         debugImplementation("androidx.compose.ui:ui-tooling")
         debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+        implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+        implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+        implementation ("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+        implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+        implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+
+        val latest_release = "0.2.4-alpha"
+        implementation("com.github.tehras:charts:$latest_release")
+        implementation ("androidx.compose.ui:ui:1.5.0")
+        implementation ("androidx.compose.material3:material3:1.2.0")
+        implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+        implementation("com.patrykandpatrick.vico:compose:1.11.2")
 
 
     }

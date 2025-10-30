@@ -34,7 +34,7 @@ class ExpenseViewModel @Inject constructor(
         calculateTotals()
     }
 
-    private fun getAllExpenses() {
+    fun getAllExpenses() {
         viewModelScope.launch {
             repository.getAllExpenses().collectLatest { list ->
                 _expenses.value = list

@@ -31,7 +31,7 @@ sealed class Setting(val title: String) {
     object ProfileEdit : Setting("Profile edit")
     object MonthPlan : Setting("Oylik byudjet reja")
     object DarkMode : Setting("Dark Mode")
-    object IlovaHaqida : Setting("Ilova haqida")
+    object IlovaHaqida : Setting("About app")
 
 
 }

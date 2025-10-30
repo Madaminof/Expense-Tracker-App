@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.Button
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -11,6 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.expensetracker.presentation.AppStatusBar
 import com.example.expensetracker.presentation.NavHost
+import com.example.expensetracker.presentation.Screen
 import com.example.expensetracker.presentation.viewmodel.ExpenseViewModel
 import com.example.expensetracker.presentation.viewmodel.ProfileViewModel
 import com.example.expensetracker.ui.theme.ExpenseTrackerTheme
@@ -25,7 +27,7 @@ class MainActivity : ComponentActivity() {
             val profileViewModel: ProfileViewModel = hiltViewModel()
             val isDarkMode by profileViewModel.isDarkMode.collectAsState()
             val navController = rememberNavController()
-            val viewModel: ExpenseViewModel = viewModel()
+            val viewModel: ExpenseViewModel = hiltViewModel()
             ExpenseTrackerTheme (
                 darkTheme = isDarkMode
             ){
@@ -33,5 +35,7 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController,viewModel)
             }
         }
+
+
     }
 }

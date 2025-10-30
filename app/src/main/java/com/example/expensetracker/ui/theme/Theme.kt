@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = Color(0xFF03584E),
-    primaryContainer = Color(0xFF02453D),
+    primaryContainer = Color(0xFF023831),
     secondary = PurpleGrey80,
     tertiary = Pink80,
     background = Color.Black,
@@ -26,14 +26,17 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = Color(0xFFC7C7C7),
 
     surfaceContainer = Color(0xFF02453D),
-    surfaceDim = Color(0xFF03584E).copy(0.15f)
+    surfaceDim = Color(0xFF4E4E4E).copy(0.15f),
+    surfaceVariant = Color(0xFF111111),
+    tertiaryContainer = Color(0xFF37A13C)
+
 
 
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color(0xFF039987),
-    primaryContainer = Color(0xFF028778),
+    primary = Color(0xFF048E7E),
+    primaryContainer = Color(0xFF027669),
     secondary = PurpleGrey40,
     tertiary = Pink40,
     background = Color(0xFFFFFBFE),
@@ -45,7 +48,10 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
 
     surfaceContainer = Color(0xFFF3F3F3),
-    surfaceDim = Color(0xFFF3F3F3)
+    surfaceDim = Color(0xFFF3F3F3),
+    surfaceVariant = Color(0xFFDCDCDC),
+    tertiaryContainer = Color(0xFF37A13C)
+
 
 )
 
@@ -53,7 +59,7 @@ private val LightColorScheme = lightColorScheme(
 fun ExpenseTrackerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

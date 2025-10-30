@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -49,7 +50,7 @@ fun EditExpenseDialog(
                 OutlinedTextField(
                     value = amount,
                     onValueChange = {
-                        amount = it.replace(',', '.') // vergulni nuqtaga almashtiramiz
+                        amount = it.replace(',', '.')
                     },
                     label = { Text("Miqdor") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -74,6 +75,7 @@ fun EditExpenseDialog(
             TextButton(onClick = onDismiss) {
                 Text("Bekor qilish")
             }
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.surfaceVariant
     )
 }

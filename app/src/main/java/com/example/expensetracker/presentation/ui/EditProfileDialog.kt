@@ -57,7 +57,6 @@ fun EditProfileDialog(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
-            // 📸 Tanlangan rasmni app papkasiga saqlaymiz
             val savedUri = saveImageToInternalStorage(context, it)
             imageUri = savedUri
         }
@@ -103,7 +102,6 @@ fun EditProfileDialog(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Username
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
@@ -131,7 +129,8 @@ fun EditProfileDialog(
             TextButton(onClick = onDismiss) {
                 Text("Bekor qilish")
             }
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.surfaceVariant
     )
 }
 

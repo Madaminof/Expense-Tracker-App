@@ -21,11 +21,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,16 +41,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.expancetracker.R
 import com.example.expensetracker.data.local.Entity.notifyList
+import com.example.expensetracker.presentation.Screen
+import com.example.expensetracker.presentation.ui.ScaffoldComponents.AppBottomBar
 
 
 @Composable
 fun NotificationScreen(navController: NavController){
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
     Scaffold(
         topBar = {
             LargeHeader(
@@ -56,7 +65,31 @@ fun NotificationScreen(navController: NavController){
                 navigationIcon = Icons.Filled.ArrowBackIosNew,
                 onClick = {navController.popBackStack()}
             )
-        }
+        },
+        bottomBar = {
+            AppBottomBar(
+                navController = navController,
+                currentRoute = currentRoute
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate(Screen.AddEdit.route) },
+                shape = CircleShape,
+                containerColor = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .offset(y = 50.dp)
+                    .size(64.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add Expense",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+
+            }
+        },
+        floatingActionButtonPosition = FabPosition.Center,
     ) { paddingValues ->
 
         Column(
@@ -64,7 +97,7 @@ fun NotificationScreen(navController: NavController){
                 .padding(paddingValues)
                 .fillMaxWidth()
         ) {
-            HeaderComponent()
+            HeaderComponent(icon = R.drawable.notification_icon)
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -72,8 +105,10 @@ fun NotificationScreen(navController: NavController){
                items(notifyList){item ->
                    NotifyCardItem(item.title)
                }
-
             }
+
+
+
         }
 
     }
@@ -81,7 +116,9 @@ fun NotificationScreen(navController: NavController){
 
 
 @Composable
-fun HeaderComponent(){
+fun HeaderComponent(
+    icon:Int
+){
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -98,8 +135,9 @@ fun HeaderComponent(){
                         bottomEnd = 32.dp
                     )
                 )
-        )
+        ){
 
+        }
         Card(
             shape = CircleShape,
             modifier = Modifier
@@ -129,7 +167,7 @@ fun HeaderComponent(){
             )
         ) {
             Icon(
-                imageVector = Icons.Filled.Notifications,
+                painter = painterResource(id = icon),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primaryContainer, // rang
                 modifier = Modifier
@@ -186,20 +224,15 @@ fun NotifyCardItem(
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.onSurface,
-                maxLines = if (expanded) Int.MAX_VALUE else 1, // 🔹 kengaytirish
-                overflow = TextOverflow.Ellipsis, // 🔹 ortiqcha matnni "..." bilan yashirish
+                maxLines = if (expanded) Int.MAX_VALUE else 1,
+                overflow = TextOverflow.Ellipsis,
                 fontSize = 15.sp,
                 modifier = Modifier.animateContentSize()
-                    .padding(end = 32.dp)// 🔹 animatsion kengayish
+                    .padding(end = 32.dp)
             )
         }
     }
 }
-
-
-
-
-
 
 
 

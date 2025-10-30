@@ -14,10 +14,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object AppModuleDb {
 
     @Provides
     @Singleton
@@ -27,26 +26,24 @@ object AppModule {
             ExpenseDatabase::class.java,
             "expense_db"
         )
-            .fallbackToDestructiveMigration() // 🔥 bu muammoni hal qiladi
+            .fallbackToDestructiveMigration()
             .build()
 
     @Provides
     @Singleton
     fun provideExpenseDao(db: ExpenseDatabase): ExpenseDao = db.expenseDao()
 
-    // 🔥 Shu joyni qo‘shasiz
     @Provides
+    @Singleton
     fun provideProfileDao(db: ExpenseDatabase): ProfileDao = db.profileDao()
 
     @Provides
     @Singleton
-    fun provideExpenseRepository(dao: ExpenseDao): ExpenseRepository = ExpenseRepository(dao)
+    fun provideExpenseRepository(dao: ExpenseDao): ExpenseRepository =
+        ExpenseRepository(dao)
 
     @Provides
     @Singleton
-    fun provideDataStoreManager(
-        @ApplicationContext context: Context
-    ): DataStoreManager {
-        return DataStoreManager(context)
-    }
+    fun provideDataStoreManager(@ApplicationContext context: Context): DataStoreManager =
+        DataStoreManager(context)
 }

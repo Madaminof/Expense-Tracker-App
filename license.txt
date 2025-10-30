@@ -1,0 +1,24 @@
+MyFinance – Personal Expense Tracker App
+Copyright (c) [2025] [Samandar Madaminov]
+
+---
+
+License Agreement:
+
+1. You are granted a non-exclusive, non-transferable license to use, modify, and deploy this source code for personal or commercial projects.
+
+2. You MAY:
+   - Use the source code in your own applications.
+   - Modify the source code to suit your project needs.
+   - Publish an app built using this source code.
+
+3. You MAY NOT:
+   - Resell, redistribute, or give away the original source code in any form.
+   - Claim this source code as your own original work.
+   - Use this code for illegal purposes.
+
+---
+
+Disclaimer:
+This software is provided "as is", without warranty of any kind.  
+The author is not responsible for any damage or loss resulting from the use of this code.

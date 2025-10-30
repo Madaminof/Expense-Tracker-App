@@ -22,14 +22,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.BorderColor
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,7 +50,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -57,13 +58,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.rememberAsyncImagePainter
 import com.example.expancetracker.R
 import com.example.expensetracker.data.local.Entity.Setting
 import com.example.expensetracker.data.local.Entity.settingList
 import com.example.expensetracker.presentation.Screen
+import com.example.expensetracker.presentation.ui.ScaffoldComponents.AppBottomBar
 import com.example.expensetracker.presentation.viewmodel.ProfileViewModel
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,7 +74,10 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel()
 ){
     val profile by viewModel.profile.collectAsState()
-    val showEditDialog = remember { mutableStateOf(false) }  // 🔹 dialog holati
+    val showEditDialog = remember { mutableStateOf(false) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     Scaffold(
         topBar = {
             LargeHeader(
@@ -82,7 +87,31 @@ fun ProfileScreen(
                 actionIcon = Icons.Filled.Notifications,
                 onActionClick = { navController.navigate(Screen.Notification.route) }
             )
-        }
+        },
+        bottomBar = {
+            AppBottomBar(
+                navController = navController,
+                currentRoute = currentRoute
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate(Screen.AddEdit.route) },
+                shape = CircleShape,
+                containerColor = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .offset(y = 50.dp)
+                    .size(64.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add Expense",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+
+            }
+        },
+        floatingActionButtonPosition = FabPosition.Center,
     ) {paddingValues ->
 
         Column(
@@ -94,7 +123,7 @@ fun ProfileScreen(
             ProfileImage(
                 viewModel, showEditDialog = showEditDialog,
             )
-            SettingList(showEditDialog = showEditDialog) // ✅ shu ham state oladi
+            SettingList(showEditDialog = showEditDialog,navController = navController)
 
         }
         if (showEditDialog.value) {
@@ -120,8 +149,8 @@ fun LargeHeader(
     title: String,
     onClick: () -> Unit,
     navigationIcon: ImageVector,
-    actionIcon: ImageVector? = null, // 🔹 optional bo‘ldi
-    onActionClick: (() -> Unit)? = null // 🔹 optional action bosilishi
+    actionIcon: ImageVector? = null,
+    onActionClick: (() -> Unit)? = null
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -142,7 +171,6 @@ fun LargeHeader(
             }
         },
         actions = {
-            // 🔹 faqat actionIcon mavjud bo‘lsa chiqadi
             if (actionIcon != null) {
                 IconButton(onClick = { onActionClick?.invoke() }) {
                     Icon(
@@ -268,7 +296,8 @@ fun ProfileImage(
 @Composable
 fun SettingList(
     showEditDialog: MutableState<Boolean>,
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: ProfileViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val isDarkMode by viewModel.isDarkMode.collectAsState()
 
@@ -289,8 +318,11 @@ fun SettingList(
                         .clickable {
                             when (item.title) {
                                 Setting.ProfileEdit.title -> showEditDialog.value = true
-                                Setting.MonthPlan.title -> { /* TODO: Month plan bosilganda amal */
+                                Setting.MonthPlan.title -> { /* TODO: Month plan bosilganda amal */ }
+                                Setting.IlovaHaqida.title -> {
+                                    navController.navigate(Screen.About.route)
                                 }
+
                             }
                         },
                     shape = RoundedCornerShape(16.dp),
@@ -321,7 +353,6 @@ fun SettingList(
                             )
                         }
 
-                        // Title
                         Text(
                             text = item.title,
                             color = MaterialTheme.colorScheme.onSurface,
@@ -332,7 +363,6 @@ fun SettingList(
 
                         Spacer(modifier = Modifier.weight(1f))
 
-                        // Switch (faqat kerakli item uchun)
                         if (item.hasSwitch) {
                             Switch(
                                 checked = isDarkMode,

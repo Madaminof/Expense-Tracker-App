@@ -1,12 +1,14 @@
 package com.example.expensetracker.presentation
 
 
+import android.annotation.SuppressLint
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.text.SimpleDateFormat
+import java.time.LocalTime
 import java.util.*
 
 fun formatSmartDate(timestamp: Long): String {
@@ -21,6 +23,23 @@ fun formatSmartDate(timestamp: Long): String {
 
     return sdf.format(Date(timestamp))
 }
+
+
+@SuppressLint("NewApi")
+fun getGreetingText(): String {
+    val now = LocalTime.now()
+
+    val hour = now.hour
+
+    return when (hour) {
+        in 5..11 -> "Good Morning," // Soat 5:00 dan 11:59 gacha
+        in 12..17 -> "Good Afternoon," // Soat 12:00 dan 17:59 gacha
+        else -> "Good Evening," // Soat 18:00 dan ertalab 4:59 gacha
+    }
+}
+
+
+
 
 @Composable
 fun AppStatusBar(
@@ -37,7 +56,7 @@ fun AppStatusBar(
         )
         systemUiController.setNavigationBarColor(
             color = navBarColor,
-            darkIcons = !darkIcons // nav bar iconlari status bar ga qarab
+            darkIcons = !darkIcons
         )
     }
 }
